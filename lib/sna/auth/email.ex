@@ -36,4 +36,5 @@ defmodule Sna.Auth.Mail do
   def handle_cast(_data, _state) do
     {:error, :wrong_cast}
   end
+
 end
