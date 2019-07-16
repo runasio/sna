@@ -1,22 +1,25 @@
 defmodule Sna.MixProject do
   use Mix.Project
 
-  def project do
+  def project() do
     [
       app: :sna,
+      name: "SNA",
       version: "0.1.0",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
       source_url: "https://github.com/runas/sna",
       homepage_url: "http://runas.io",
+      description: description(),
+      package: package(),
     ]
   end
 
-  def application do
+  def application() do
     [
       mod: {Sna.Application, []},
       extra_applications: [:logger, :runtime_tools]
@@ -26,7 +29,7 @@ defmodule Sna.MixProject do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
-  defp deps do
+  defp deps() do
     [
       {:phoenix, "~> 1.4.9"},
       {:phoenix_pubsub, "~> 1.1"},
@@ -45,11 +48,24 @@ defmodule Sna.MixProject do
     ]
   end
 
-  defp aliases do
+  defp aliases() do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"]
+    ]
+  end
+
+  defp description() do
+    "Social Network Authentication frontend and backend."
+  end
+
+  defp package() do
+    [
+      name: "sna",
+      files: ~w(lib priv .formatter.exs mix.exs README* LICENSE*),
+      licenses: ["Apache-2.0"],
+      links: %{"GitHub" => "https://github.com/runasio/sna"}
     ]
   end
 end
