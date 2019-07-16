@@ -1,0 +1,10 @@
+<h1>Authentication</h1>
+  <p>An e-mail has been sent to <%= @email %>. Follow the link given there to log-in
+  or paste the token here</p>
+  <p>The link is <a href="?token=<%= @token %>"><%= @token %></a></p>
+  <form method="post" action="/auth/email">
+    <input name="_csrf_token" type="hidden" value="<%= Plug.CSRFProtection.get_csrf_token() %>">
+    <input type="text" name="token" />
+    <input type="submit" />
+  </form>
+</form>

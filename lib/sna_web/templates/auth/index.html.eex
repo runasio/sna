@@ -1,0 +1,7 @@
+<h1>Authentication</h1>
+  <form method="post" action="/auth/email">
+    <input name="_csrf_token" type="hidden" value="<%= Plug.CSRFProtection.get_csrf_token() %>">
+    <input type="text" name="email" />
+    <input type="submit" />
+  </form>
+</form>
