@@ -39,7 +39,10 @@ defmodule Sna.MixProject do
       {:gen_state_machine, "~> 2.0"},
       {:httpoison, "~> 1.4"},
       {:ex_json_schema, "~> 0.5.4"},
-      {:swoosh, "~> 0.23"},
+
+      # email module 
+      {:bamboo, "~> 1.2"},
+      {:email_checker, "~> 0.1.2"},
     ]
   end
 
