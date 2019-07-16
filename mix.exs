@@ -11,6 +11,8 @@ defmodule Sna.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
+      source_url: "https://github.com/runas/sna",
+      homepage_url: "http://runas.io",
     ]
   end
 
