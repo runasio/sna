@@ -32,7 +32,12 @@ defmodule SnaWeb.AuthControllerTest do
     assert html_response(conn, 200) =~ "<input type=\"text\" name=\"token\""
   end
 
-  test "POST /auth/email?token=valid", %{conn: conn} do
+  test "POST /auth/email?token=valid,existing", %{conn: conn} do
+    Sna.Repo.User.insert(%{
+      email: example_email(),
+      login: "login",
+    })
+
     token = example_token()
     conn = conn
       |> post("/auth/email", token: token)
@@ -61,6 +66,33 @@ defmodule SnaWeb.AuthControllerTest do
     assert html_response(conn, 200) =~ "<a href=\"/auth\">Authenticate</a>"
   end
 
+  test "POST /auth/email?token=valid,new", %{conn: conn} do
+    example_login = "login"
+    token = example_token()
+    conn = conn
+      |> post("/auth/email", token: token)
+
+    assert Sna.Repo.User.email_exists(example_email()) === false
+    assert html_response(conn, 200) =~ "choose a unique username"
+    assert html_response(conn, 200) =~ "<form method=\"post\" action=\"/auth/email\""
+    assert html_response(conn, 200) =~ "<input type=\"hidden\" name=\"token\""
+    assert html_response(conn, 200) =~ "<input type=\"text\" name=\"login\""
+
+    conn = conn
+      |> post("/auth/email", token: token, login: example_login)
+
+    assert Sna.Repo.User.email_exists(example_email())
+    assert redirected_to(conn) === "/"
+    assert get_session(conn, "auth_token") === token
+
+    conn = conn
+      |> recycle()
+      |> get("/")
+
+    assert html_response(conn, 200) =~ "Authenticated as #{example_email()}"
+    assert html_response(conn, 200) =~ "<a href=\"/auth/logout\">log-out</a>"
+  end
+
   test "POST /auth/email?token=invalid", %{conn: conn} do
     conn = conn
       |> post("/auth/email", token: "invalid.jwt.token")
@@ -76,5 +108,40 @@ defmodule SnaWeb.AuthControllerTest do
 
     assert redirected_to(conn) === "/auth"
     assert get_flash(conn, :error) =~ "No valid claims"
+  end
+
+  test "POST /auth/email?token=valid&login=existing", %{conn: conn} do
+    example_login = "login"
+    Sna.Repo.User.insert(%{
+      email: "another-mailbox@example.org",
+      login: example_login,
+    })
+    token = example_token()
+
+    conn = conn
+      |> post("/auth/email", token: token, login: example_login)
+
+    assert Sna.Repo.User.email_exists(example_email()) === false
+    assert html_response(conn, 200) =~ "choose a unique username"
+    assert html_response(conn, 200) =~ "<form method=\"post\" action=\"/auth/email\""
+    assert html_response(conn, 200) =~ "<input type=\"hidden\" name=\"token\""
+    assert html_response(conn, 200) =~ "<input type=\"text\" name=\"login\""
+    assert html_response(conn, 200) =~ "Error: has already been taken"
+  end
+
+  test "POST /auth/email?token=valid,existing&login=different", %{conn: conn} do
+    example_login = "login"
+    Sna.Repo.User.insert(%{
+      email: example_email(),
+      login: "other-login",
+    })
+
+    token = example_token()
+
+    conn = conn
+      |> post("/auth/email", token: token, login: example_login)
+
+    assert redirected_to(conn) === "/"
+    assert get_flash(conn, :error) =~ "You already registered"
   end
 end

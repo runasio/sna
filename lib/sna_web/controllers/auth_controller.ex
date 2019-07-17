@@ -17,19 +17,50 @@ defmodule SnaWeb.AuthController do
     end
   end
 
-  def email(conn, %{"token" => token}) do
-    case SnaWeb.Token.validate_bearer(token) do
-      {:ok, %{"email" => _email}} ->
-        conn
-          |> put_session("auth_token", token)
-          |> redirect(to: "/")
-          |> halt()
-      {:error, reason} ->
+  def email(conn, params = %{"token" => token}) do
+    case [SnaWeb.Token.validate_bearer(token), params] do
+      [{:ok, %{"email" => email}}, %{"login" => login}] ->
+        inserted = Sna.Repo.User.insert(%{
+          email: email,
+          login: login,
+          admin: false,
+        })
+        case inserted do
+          {:ok, _} ->
+            conn
+              |> put_session("auth_token", token)
+              |> redirect(to: "/")
+              |> halt()
+          {:error, %{errors: [ email: { _, [ constraint: :unique, constraint_name: _ ] } ]}} ->
+            conn
+              |> put_flash(:error, "You already registered")
+              |> redirect(to: "/")
+              |> halt()
+          {:error, errors} ->
+            errors = Ecto.Changeset.traverse_errors(errors, fn {msg, opts} ->
+              Enum.reduce(opts, msg, fn {key, value}, acc ->
+                String.replace(acc, "%{#{key}}", to_string(value))
+              end)
+            end)
+            conn
+              |> render("first-login.html", token: token, email: email, errors: errors)
+        end
+      [{:ok, %{"email" => email}}, _] ->
+        if Sna.Repo.User.email_exists(email) do
+          conn
+            |> put_session("auth_token", token)
+            |> redirect(to: "/")
+            |> halt()
+        else
+          conn
+            |> render("first-login.html", token: token, email: email)
+        end
+      [{:error, reason}, _] ->
         conn
           |> put_flash(:error, "Could not verify token: #{reason}")
           |> redirect(to: "/auth")
           |> halt()
-      _ ->
+      [_, _] ->
         conn
           |> put_flash(:error, "No valid claims in this token")
           |> redirect(to: "/auth")

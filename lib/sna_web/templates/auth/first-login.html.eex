@@ -1,0 +1,22 @@
+<h1>Authentication</h1>
+  <p>Please choose a unique username...</p>
+  <form method="post" action="/auth/email">
+    <input type="hidden" name="_csrf_token" value="<%= Plug.CSRFProtection.get_csrf_token() %>">
+    <input type="hidden" name="token" value="<%= @token %>">
+    <p>email: <%= @email %>
+      <%= if assigns[:errors] && @errors[:email] do %>
+      Error: <%= @errors[:email] |> Enum.join(", ") %>
+      <% end %>
+    </p>
+    <p>
+      <label>
+        login:
+        <input type="text" name="login" />
+      </label>
+      <%= if assigns[:errors] && @errors[:login] do %>
+      Error: <%= @errors[:login] |> Enum.join(", ") %>
+      <% end %>
+    </p>
+    <input type="submit" />
+  </form>
+</form>
