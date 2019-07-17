@@ -18,7 +18,7 @@ defmodule SnaWeb.Token do
   def generate_bearer(%{"email" => email}) do
     config = bearer_config()
       |> add_claim("email", fn -> email end)
-    Joken.generate_and_sign(config, nil, app_signer())
+    Joken.generate_and_sign(config, %{}, app_signer())
   end
 
   @doc """
