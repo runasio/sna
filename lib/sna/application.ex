@@ -5,7 +5,7 @@ defmodule Sna.Application do
 
   def start(_type, _args) do
     children = [
-      # Sna.Repo,
+      Sna.Repo,
       SnaWeb.Endpoint,
       Sna.Auth.Supervisor,
     ]

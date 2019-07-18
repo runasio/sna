@@ -53,6 +53,8 @@ defmodule Sna.Auth.Mail do
   
   use GenServer
 
+  @type token() :: bitstring()
+  @type mail() :: bitstring()
   @type state() :: reference()
 
   @type store() :: bitstring()
@@ -64,6 +66,10 @@ defmodule Sna.Auth.Mail do
   @type unvalidate() :: bitstring()
   @type message_unvalidate() :: {:unvalidate, unvalidate()}
 
+  @type check() :: ({mail(), list()} -> :ok | {:error, term()})
+ 
+  @type action() :: ({mail(), token()}  -> :ok | {:error, term()})
+  
   @doc """
 
   start/0 start Sna.Auth.Mail without link.
@@ -106,9 +112,9 @@ defmodule Sna.Auth.Mail do
 
   @spec init(list()) :: {:ok, state()}
   def init(args) do
-    check = Keyword.get(args, :check, fn (x) -> {:ok, x} end)
-    timer = Keyword.get(args, :timer, 3000)
-    action = Keyword.get(args, :action, fn (x) -> {:ok, x} end)
+    check = Keyword.get(args, :check, fn (_mail) -> :ok end)
+    timer = Keyword.get(args, :timer, 30*60*100)
+    action = Keyword.get(args, :action, fn (_mail) -> :ok end)
     ets = :ets.new(__MODULE__, [:private])
     ets |> :ets.insert({:check, check})
     ets |> :ets.insert({:timer, timer})
@@ -130,17 +136,25 @@ defmodule Sna.Auth.Mail do
 
   @spec handle_cast(tuple(), state()) :: {:noreply, term()}
   def handle_cast({:unvalidate, data}, state), do: handle_unvalidate(data, state)
+  def handle_cast({:set, :timer, timer}, state), do: handle_set({:timer, timer}, state)
+  def handle_cast({:set, :action, action}, state), do: handle_set({:action, action}, state)
+  def handle_cast({:set, :check, check}, state), do: handle_set({:check, check}, state)
   def handle_cast(_data, _state), do: {:error, :wrong_cast}
 
   @spec handle_store(store(), state()) :: {:reply, term(), state()}
   defp handle_store({mail, opts}, state) do
     # TODO: check mail before doing more
     check = state |> get_check()
-    token = generate_token()
-    tref = state |> create_timer(token)    
-    true = state |> :ets.insert({token, mail, tref, opts})
-    _ret = state |> execute_action({token, mail, tref, opts})
-    {:reply, {:ok, token}, state}
+    case check.({mail, opts}) do
+      :ok ->
+        token = generate_token()
+        tref = state |> create_timer(token)    
+        true = state |> :ets.insert({token, mail, tref, opts})
+        _ret = state |> execute_action({mail, token})
+        {:reply, {:ok, token}, state}
+      _ ->
+        {:reply, {:error, :unvalid_mail}, state}
+    end
   end
 
   @spec handle_validate(validate(), state()) :: {:reply, term(), state()}
@@ -160,6 +174,12 @@ defmodule Sna.Auth.Mail do
     {:noreply, state}
   end
 
+  @spec handle_set(term(), state()) :: {:noreply, state()}
+  defp handle_set(data, state) do
+    state |> :ets.insert(data)
+    {:noreply, state}
+  end
+  
   @spec get_check(state()) :: function()
   defp get_check(state) do
     state |> :ets.lookup(:check) |> Keyword.get(:check)
@@ -183,7 +203,7 @@ defmodule Sna.Auth.Mail do
   @spec create_timer(state(), bitstring()) :: tuple()
   defp create_timer(state, token) do
     timer = state |> get_timer()
-    {:ok, tref} = :timer.apply_after(timer, __MODULE__, :unvalidate, token)
+    {:ok, tref} = :timer.apply_after(timer, __MODULE__, :unvalidate, [token])
     tref
   end
 
@@ -292,9 +312,61 @@ defmodule Sna.Auth.Mail do
       iex> token = "somerandomtoken"
       iex> pid = :erlang.whereis(Sna.Auth.Mail)
       iex> pid |> Sna.Auth.Mail.unvalidate(token)
+      :ok
 
   """
   def unvalidate(pid, token) do
     GenServer.cast(pid, {:unvalidate, token})
+  end
+
+  @doc """
+
+  set/2 configure key/value (check, action, timer) in Sna.Auth.Mail.
+
+      # set a new timer to 3 seconds
+      iex> Sna.Auth.Mail.set(:timer, 3*100)
+      :ok
+
+      # set a new check function
+      iex> f = fn ({"allowed@mail.com", _}) -> :ok 
+                  (_) -> {:error, :wrong_mail}
+           end
+      iex> Sna.Auth.Mail.set(:check, f)
+      :ok
+
+      # set a new action function
+      iex> f = fn ({mail, _}) -> IO.inspect(mail) end
+      iex> Sna.Auth.Mail.set(:action, f)
+      :ok
+
+  """
+  def set(key, value) do
+    __MODULE__ |> set(key, value)
+  end
+
+  @doc """
+
+  set/3 configure key/value (check, action, timer) in Sna.Auth.Mail
+
+      # set a new timer to 3 seconds
+      iex> Sna.Auth.Mail |> Sna.Auth.Mail.set(:timer, 3*100)
+      :ok
+
+      # set a new check function
+      iex> f = fn ({"allowed@mail.com", _}) -> :ok 
+                  (_) -> {:error, :wrong_mail}
+           end
+      iex> Sna.Auth.Mail |> Sna.Auth.Mail.set(:check, f)
+      :ok
+
+      # set a new action function
+      iex> f = fn ({mail, _}) -> IO.inspect(mail) end
+      iex> Sna.Auth.Mail |> Sna.Auth.Mail.set(:action, f)
+      :ok
+
+
+  """
+  def set(pid, key, value) do
+    pid |> GenServer.cast({:set, key, value})
   end
 end
