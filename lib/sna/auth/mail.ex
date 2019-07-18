@@ -125,6 +125,7 @@ defmodule Sna.Auth.Mail do
   def handle_call({:store, mail}, _from, state), do: handle_store({mail, []}, state)
   def handle_call({:store, mail, opts}, _from, state), do: handle_store({mail, opts}, state)
   def handle_call({:validate, token}, _from, state), do: handle_validate(token, state)
+  def handle_call({:validate, token, _opts}, _from, state), do: handle_validate(token, state)
   def handle_call(_data, _from, _state),  do: {:error, :wrong_call}
 
   @spec handle_cast(tuple(), state()) :: {:noreply, term()}
