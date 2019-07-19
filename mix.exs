@@ -22,7 +22,7 @@ defmodule Sna.MixProject do
   def application() do
     [
       mod: {Sna.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :bamboo, :bamboo_smtp]
     ]
   end
 
@@ -46,6 +46,8 @@ defmodule Sna.MixProject do
       {:httpoison, "~> 1.4"},
       {:ex_json_schema, "~> 0.5.4"},
       {:swoosh, "~> 0.23"},
+      {:bamboo, "~> 1.2"},
+      {:bamboo_smtp, "~> 1.7.0"},
     ]
   end
 
