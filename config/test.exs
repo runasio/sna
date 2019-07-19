@@ -16,3 +16,6 @@ config :sna, SnaWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :sna, Sna.Mailer,
+  adapter: Bamboo.TestAdapter
