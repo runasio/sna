@@ -1,18 +1,47 @@
 language: elixir
+
+dist: bionic
+
 elixir:
   - 1.6
   - 1.7
   - 1.8
+
 otp_release:
+  - 20.1
   - 20.3
+  - 21.0
   - 21.3
-  - 22.0
-env: MIX_ENV=test
+
+env: MIX_ENV=test SH=sh DB_NAME=sna_test DB_USER=sna_test DB_PASS=sna_test DB_HOST=localhost
+
 sudo: false
+
 notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#runas"
+    on_success: change # default: always
+    on_failure: always # default: always
+    use_notice: true
+
 email: false
+
+addons:
+  postgresql: "10"
+  apt:
+    packages:
+      - postgresql-10
+      - postgresql-client-10
+
+services:
+  - postgresql
+
 before_script:
+  - psql -c "create database sna_test;" -U postgres
   - kerl list installations
+
 script:
   - mix compile
   - mix test
+  - mix test test/**/*.exs
