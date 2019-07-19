@@ -30,4 +30,12 @@ defmodule SnaWeb.Token do
   def validate_bearer(token) do
     Joken.verify_and_validate(bearer_config(), token, app_signer())
   end
+
+  @spec error_message(binary, Joken.error_reason) :: binary
+  def error_message(prefix, reason) do
+    case reason do
+      [{:message, msg} | _] -> "#{prefix}: #{msg}"
+      _ -> prefix
+    end
+  end
 end

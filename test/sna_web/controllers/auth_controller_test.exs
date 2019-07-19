@@ -98,7 +98,15 @@ defmodule SnaWeb.AuthControllerTest do
       |> post("/auth/email", token: "invalid.jwt.token")
 
     assert redirected_to(conn) === "/auth"
-    assert get_flash(conn, :error) =~ "Could not verify token"
+    assert get_flash(conn, :error) === "Could not verify token"
+  end
+
+  test "POST /auth/email?token=invalid-jwt", %{conn: conn} do
+    conn = conn
+      |> post("/auth/email", token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
+
+    assert redirected_to(conn) === "/auth"
+    assert get_flash(conn, :error) === "Could not verify token"
   end
 
   test "POST /auth/email?token=empty", %{conn: conn} do

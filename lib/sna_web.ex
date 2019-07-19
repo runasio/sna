@@ -24,6 +24,7 @@ defmodule SnaWeb do
       import Plug.Conn
       import SnaWeb.Auth, only: [current_user: 1]
       import SnaWeb.Gettext
+      require Logger
       alias SnaWeb.Router.Helpers, as: Routes
     end
   end

@@ -10,8 +10,10 @@ defmodule SnaWeb.AuthController do
       {:ok, token, _claims} ->
         render(conn, "email.html", email: email, token: token)
       {:error, reason} ->
+        Logger.error("Internal error, could not verify token: #{inspect(reason)}")
+        msg = SnaWeb.Token.error_message("Internal error, could not generate token", reason)
         conn
-          |> put_flash(:error, reason)
+          |> put_flash(:error, msg)
           |> redirect(to: "/auth")
           |> halt()
     end
@@ -56,8 +58,10 @@ defmodule SnaWeb.AuthController do
             |> render("first-login.html", token: token, email: email)
         end
       [{:error, reason}, _] ->
+        Logger.error("Could not verify token: #{inspect(reason)}")
+        msg = SnaWeb.Token.error_message("Could not verify token", reason)
         conn
-          |> put_flash(:error, "Could not verify token: #{reason}")
+          |> put_flash(:error, msg)
           |> redirect(to: "/auth")
           |> halt()
       [_, _] ->
