@@ -15,8 +15,9 @@ defmodule SnaWeb.Auth do
           conn
             |> Plug.Conn.assign(:auth, %{email: email})
         {:error, reason} ->
+          message = Keyword.get(reason, :message, "")
           conn
-            |> Phoenix.Controller.put_flash(:error, "Could not verify token: #{reason}")
+            |> Phoenix.Controller.put_flash(:error, "Could not verify token: #{message}")
         _ ->
           conn
             |> Phoenix.Controller.put_flash(:error, "No valid claims in this token")

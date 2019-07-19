@@ -15,15 +15,19 @@ defmodule SnaWeb.Router do
     plug :check_auth
   end
 
+  scope "/auth", SnaWeb do
+    pipe_through :browser
+    
+    get  "/", AuthController, :index
+    post "/email", AuthController, :email
+    get  "/email", AuthController, :email
+    get  "/logout", AuthController, :logout
+  end
+  
   scope "/", SnaWeb do
     pipe_through :browser
 
     get "/", PageController, :index
-
-    get  "/auth/", AuthController, :index
-    post "/auth/email", AuthController, :email
-    get  "/auth/email", AuthController, :email
-    get  "/auth/logout", AuthController, :logout
   end
 
 end

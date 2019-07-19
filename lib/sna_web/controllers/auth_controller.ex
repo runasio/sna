@@ -8,6 +8,7 @@ defmodule SnaWeb.AuthController do
   def email(conn, %{"email" => email}) do
     case SnaWeb.Token.generate_bearer(%{"email" => email}) do
       {:ok, token, _claims} ->
+        SnaWeb.Mail.token_validation(conn, email, token)
         render(conn, "email.html", email: email, token: token)
       {:error, reason} ->
         conn
