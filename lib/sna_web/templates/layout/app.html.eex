@@ -12,6 +12,14 @@
       <section class="container">
         <nav role="navigation">
           <ul>
+            <%=
+            case current_user(@conn) do
+              %{email: email} ->
+              raw "<li>Authenticated as #{email} <a href=\"/auth/logout\">log-out</a></li>"
+              _ ->
+                raw "<li><a href=\"/auth\">Authenticate</a></li>"
+            end
+            %>
             <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
           </ul>
         </nav>

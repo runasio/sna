@@ -22,6 +22,7 @@ defmodule SnaWeb do
       use Phoenix.Controller, namespace: SnaWeb
 
       import Plug.Conn
+      import SnaWeb.Auth, only: [current_user: 1]
       import SnaWeb.Gettext
       alias SnaWeb.Router.Helpers, as: Routes
     end
@@ -36,6 +37,8 @@ defmodule SnaWeb do
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
 
+      import SnaWeb.Auth, only: [current_user: 1]
+
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
@@ -49,6 +52,7 @@ defmodule SnaWeb do
     quote do
       use Phoenix.Router
       import Plug.Conn
+      import SnaWeb.Auth, only: [check_auth: 2]
       import Phoenix.Controller
     end
   end
