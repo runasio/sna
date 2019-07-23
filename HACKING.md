@@ -26,3 +26,19 @@ Check you can log-in:
 Create the `sna_dev` database:
 
     $ sudo -u postgres createdb sna_dev
+
+
+Prevent the runtime to take too much CPU making the machine unusable
+--------------------------------------------------------------------
+
+This trick can be useful, especially in case you have an infinite loop in your
+program and the runtime start to consume CPU and IO with no reason, making your
+machine unusable and forcing a hard-reboot.
+
+[cpulimit][cpulimit] is a small utility that will put any process to sleep if
+it consumes more than the configured amount of CPU. It can save your day. To
+start the server with it, you can run:
+
+    cpulimit -l 50 -i mix phx.server
+
+[cpulimit]: http://cpulimit.sourceforge.net/

@@ -11,9 +11,10 @@ defmodule Sna.Repo.User do
   import Ecto.Changeset
 
   @type t :: %{
-    :login => String.t,
-    :email => String.t,
-    :admin => boolean,
+    optional(:id) => integer,
+    :login        => String.t,
+    :email        => String.t,
+    :admin        => boolean,
   }
 
   schema "users" do
@@ -51,6 +52,15 @@ defmodule Sna.Repo.User do
       [1] ->
         true
     end
+  end
+
+  @spec get_by_email(String.t) :: __MODULE__.t
+  def get_by_email(email) do
+    import Ecto.Query
+    [ res ] = Sna.Repo.all(
+      from u in __MODULE__,
+      where: u.email == ^email)
+    res
   end
 
   @spec insert(__MODULE__.t) :: {:ok, __MODULE__.t} | {:error, Ecto.Changeset.t()}

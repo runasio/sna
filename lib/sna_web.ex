@@ -53,8 +53,9 @@ defmodule SnaWeb do
     quote do
       use Phoenix.Router
       import Plug.Conn
-      import SnaWeb.Auth, only: [check_auth: 2]
+      import SnaWeb.Auth, only: [check_auth: 2, ensure_auth: 2]
       import Phoenix.Controller
+      require Logger
     end
   end
 
