@@ -28,6 +28,7 @@ defmodule Sna.Repo.Token do
 
   @doc """
   """
+  @spec changeset(map, map) :: %Ecto.Changeset{}
   def changeset(model, params \\ %{}) do
     model
       |> cast(params, [:user_id, :provider_id, :token, :token_secret, :creation, :retention])

@@ -23,7 +23,10 @@ defmodule SnaWeb.Auth do
         {:ok, %{"email" => email}} ->
           Logger.debug("SnaWeb.Auth.check_auth/2: email #{email}")
           conn
-            |> assign(:auth, %{email: email})
+            |> assign(:auth, %{
+              email: email,
+              id: get_session(conn, "auth_user_id")
+            })
         {:error, reason} ->
           Logger.debug("SnaWeb.Auth.check_auth/2: error #{inspect(reason)}")
           conn

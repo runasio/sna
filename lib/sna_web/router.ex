@@ -12,7 +12,9 @@ defmodule SnaWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
     plug :check_auth
+    plug PhoenixSwagger.Plug.Validate
   end
 
   pipeline :authenticated do
@@ -37,4 +39,33 @@ defmodule SnaWeb.Router do
     get "/:provider_name/oauth/callback", SnaWeb.ProviderOAuthController, :callback
   end
 
+  scope "/entries" do
+    pipe_through [:browser, :authenticated]
+
+    get  "/new",        SnaWeb.EntriesController, :new
+    get  "/",           SnaWeb.EntriesController, :index
+    get  "/:id",        SnaWeb.EntriesController, :show
+    get  "/:id/edit",   SnaWeb.EntriesController, :edit
+    post "/:id/delete", SnaWeb.EntriesController, :destroy
+  end
+
+  scope "/api/v0", as: "api_v0" do
+    pipe_through [:api, :authenticated]
+
+    post   "/entries",     SnaWeb.Api.EntriesController, :create
+    patch  "/entries/:id", SnaWeb.Api.EntriesController, :update
+  end
+
+  scope "/api/v0/swagger" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :sna, swagger_file: "swagger.json"
+  end
+
+  def swagger_info do
+    %{
+      info: %{
+        version: "0.1",
+        title: "SNA"
+      }
+    }
+  end
 end

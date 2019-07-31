@@ -17,10 +17,6 @@ defmodule SnaWeb.ProviderOAuthControllerTest do
     "mailbox@example.org"
   end
 
-  defp example_login do
-    "example"
-  end
-
   defp example_token do
     {:ok, token, _claims} = SnaWeb.Token.generate_bearer(%{"email" => example_email()})
     token
@@ -66,7 +62,7 @@ defmodule SnaWeb.ProviderOAuthControllerTest do
       from t in Sna.Repo.Token,
       join: p in assoc(t, :provider),
       join: u in assoc(t, :user),
-      where: u.email == ^example_email,
+      where: u.email == ^example_email(),
       where: p.name == "github",
       select: t)
 

@@ -25,6 +25,7 @@ defmodule Sna.Repo.Provider do
     has_one :provider_info, Sna.Repo.ProviderInfo
   end
 
+  @spec changeset(map, map) :: %Ecto.Changeset{}
   def changeset(model, params \\ %{}) do
     model
       |> cast(params, [:name, :strategy, :production])

@@ -19,6 +19,7 @@ defmodule Sna.Repo.ProviderInfo do
     field :consumer_secret, :string
   end
 
+  @spec changeset(map, map) :: %Ecto.Changeset{}
   def changeset(model, params \\ %{}) do
     model
       |> cast(params, [:provider_id, :consumer_key, :consumer_secret])
