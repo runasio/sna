@@ -1,4 +1,6 @@
-# SNA - Social Network Automation
+![](/logo.png)
+
+# RunAs.io - Social Network Hub
 
 Social Network Authentication is an Elixir/Erlang project created to
 make marketing and publishing on social network easy. The targeted
@@ -63,3 +65,30 @@ Documentation will be available in `doc`.
 ```
 mix docs
 ```
+
+## Users
+- **RunAs official documentation is present at [docs.runas.io](https://docs.runas.io).**
+- For feature requests or questions, visit
+  [https://help.runas.io/](https://help.runas.io/).
+- Check out [the demo at runas.io](https://app.runas.io)
+- Please see [releases tab](https://github.com/runasio/sna/releases) to
+  find the latest release and corresponding release notes.
+- [See the Roadmap](https://trello.com/b/NaEH5zt4/runas-product-roadmap) for list of
+  working and planned features.
+- Read about the latest updates from RunAs team [on our
+  blog](https://www.runas.io/blog/).
+- Watch tech talks on our [YouTube
+  channel](https://www.youtube.com/runasio/featured).
+
+## Developers
+- See a list of issues [that we need help with](https://github.com/runasio/sna/issues).
+- Please see [Contributing to RunAs](https://elixirforum.com/t/social-network-automation-project/24288) for guidelines on contributions.
+
+## Client Libraries
+The Dgraph team maintain a number of [officially supported client libraries](https://github.com/runasio/sna_lib).
+
+## Contact
+- Please use [help.runas.io](https://help.runas.io) for documentation, questions, feature requests and discussions.
+- Please use [Github issue tracker](https://github.com/runasio/sna/issues) for filling bugs or feature requests.
+- Join [![Slack Status](http://slack.runas.io/badge.svg)](http://slack.runas.io).
+- Follow us on Twitter [@dgraphlabs](https://twitter.com/dgraphlabs).
