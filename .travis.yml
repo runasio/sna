@@ -45,3 +45,7 @@ script:
   - mix compile
   - mix test
   - mix test test/**/*.exs
+  - MIX_ENV=dev mix dialyzer --halt-exit-status
+cache:
+  directories:
+    - priv/plts

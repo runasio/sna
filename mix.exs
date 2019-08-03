@@ -46,6 +46,7 @@ defmodule Sna.MixProject do
       {:httpoison, "~> 1.4"},
       {:ex_json_schema, "~> 0.5.4"},
       {:swoosh, "~> 0.23"},
+      {:dialyxir, "~> 1.0.0-rc.6", only: [:dev, :test], runtime: false},
     ]
   end
 
