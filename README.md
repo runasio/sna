@@ -85,10 +85,10 @@ mix docs
 - Please see [Contributing to RunAs](https://elixirforum.com/t/social-network-automation-project/24288) for guidelines on contributions.
 
 ## Client Libraries
-The Dgraph team maintain a number of [officially supported client libraries](https://github.com/runasio/sna_lib).
+The RunAs team maintain a number of [officially supported client libraries](https://github.com/runasio/sna_lib).
 
 ## Contact
 - Please use [help.runas.io](https://help.runas.io) for documentation, questions, feature requests and discussions.
 - Please use [Github issue tracker](https://github.com/runasio/sna/issues) for filling bugs or feature requests.
 - Join [![Slack Status](http://slack.runas.io/badge.svg)](http://slack.runas.io).
-- Follow us on Twitter [@dgraphlabs](https://twitter.com/dgraphlabs).
+- Follow us on Twitter [@runasio](https://twitter.com/runas_io).
