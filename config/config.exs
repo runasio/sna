@@ -10,12 +10,22 @@ use Mix.Config
 config :sna,
   ecto_repos: [Sna.Repo]
 
+config :ueberauth, Ueberauth,
+  json_library: Jason
+
+Mix.Config.config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+   client_id: System.get_env("GITHUB_CLIENT_ID"),
+   client_secret: System.get_env("GITHUB_CLIENT_SECRET");
+
 # Configures the endpoint
 config :sna, SnaWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "DPSxmdG6g232bXq8aHZ0J1eTZmCyUPYU5VbcO1GXk3McfYj+hfOokRpXKmg0u2It",
   render_errors: [view: SnaWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Sna.PubSub, adapter: Phoenix.PubSub.PG2]
+
+config :sna, :oauth_providers,
+  github: Ueberauth.Strategy.Github
 
 # Configures Elixir's Logger
 config :logger, :console,

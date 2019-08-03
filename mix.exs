@@ -26,7 +26,7 @@ defmodule Sna.MixProject do
     ]
   end
 
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "test/support", "test/mocks"]
   defp elixirc_paths(_), do: ["lib"]
 
   defp deps() do
@@ -47,6 +47,9 @@ defmodule Sna.MixProject do
       {:ex_json_schema, "~> 0.5.4"},
       {:swoosh, "~> 0.23"},
       {:dialyxir, "~> 1.0.0-rc.6", only: [:dev, :test], runtime: false},
+      {:ueberauth, "~> 0.6"},
+      {:ueberauth_github, "~> 0.7"},
+      {:poison, "~> 3.1"}, # https://github.com/ueberauth/ueberauth_github/issues/50
     ]
   end
 

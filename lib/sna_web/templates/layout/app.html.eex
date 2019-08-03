@@ -20,6 +20,7 @@
                 raw "<li><a href=\"/auth\">Authenticate</a></li>"
             end
             %>
+            <li><a href="<%= provider_o_auth_path(@conn, :request, "github") %>">Connect GitHub</a></li>
             <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
           </ul>
         </nav>
