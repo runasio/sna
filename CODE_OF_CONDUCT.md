@@ -30,6 +30,9 @@ Examples of unacceptable behavior by participants include:
  address, without explicit permission
 * Other conduct which could reasonably be considered inappropriate in a
  professional setting
+* Using and abusing a discriminating characteristic to gain advantages
+that others will not have, such as using ethnicity or sex characteristics
+to gain special rights.
 
 ## Our Responsibilities
 
