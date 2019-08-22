@@ -46,6 +46,7 @@ defmodule SnaWeb do
     quote do
       use Phoenix.View,
         root: "lib/sna_web/templates",
+        pattern: "**/*",
         namespace: SnaWeb
 
       # Import convenience functions from controllers

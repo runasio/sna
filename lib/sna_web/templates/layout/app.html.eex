@@ -4,33 +4,35 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Sna · Phoenix Framework</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <%= render_existing(@view_module, "meta/meta." <> @view_template, assigns) ||
+        render_existing(@view_module, "meta/meta.html", assigns) ||
+        render_existing(SnaWeb.LayoutView, "_meta.html", assigns) ||
+        "" %>
+    <title><%=
+      [page_title(@conn, assigns), "Social Network Automation"]
+        |> Enum.reject(&is_nil/1)
+        |> Enum.join(" · ")
+    %></title>
   </head>
   <body>
     <header>
-      <section class="container">
-        <nav role="navigation">
-          <ul>
-            <%=
-            case current_user(@conn) do
-              %{email: email} ->
-              raw "<li>Authenticated as #{email} <a href=\"/auth/logout\">log-out</a></li>"
-              _ ->
-                raw "<li><a href=\"/auth\">Authenticate</a></li>"
-            end
-            %>
-            <li><a href="<%= Routes.provider_o_auth_path(@conn, :request, "github") %>">Connect GitHub</a></li>
-            <li><a href="<%= Routes.entries_path(@conn, :index) %>">All Entries</a></li>
-            <li><a href="<%= Routes.entries_path(@conn, :new) %>">New Entry</a></li>
-            <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
-          </ul>
-        </nav>
-        <a href="http://phoenixframework.org/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
-        </a>
-      </section>
+      <nav role="navigation">
+        <ul>
+          <li><a href="<%= Routes.page_path(@conn, :index) %>">SNA</a></li>
+          <%=
+          case current_user(@conn) do
+            %{email: email} ->
+            raw "<li>Authenticated as #{email} <a href=\"/auth/logout\">log-out</a></li>"
+            _ ->
+              raw "<li><a href=\"/auth\">Authenticate</a></li>"
+          end
+          %>
+          <li><a href="<%= Routes.provider_o_auth_path(@conn, :request, "github") %>">Connect GitHub</a></li>
+          <li><a href="<%= Routes.entries_path(@conn, :index) %>">All Entries</a></li>
+          <li><a href="<%= Routes.entries_path(@conn, :new) %>">New Entry</a></li>
+        </ul>
+      </nav>
     </header>
     <main role="main" class="container">
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
