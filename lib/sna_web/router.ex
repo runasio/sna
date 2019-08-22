@@ -5,6 +5,7 @@ defmodule SnaWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
+    plug Phoenix.LiveView.Flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :check_auth
@@ -42,11 +43,16 @@ defmodule SnaWeb.Router do
   scope "/entries" do
     pipe_through [:browser, :authenticated]
 
-    get  "/new",        SnaWeb.EntriesController, :new
-    get  "/",           SnaWeb.EntriesController, :index
-    get  "/:id",        SnaWeb.EntriesController, :show
-    get  "/:id/edit",   SnaWeb.EntriesController, :edit
-    post "/:id/delete", SnaWeb.EntriesController, :destroy
+    get  "/new",                 SnaWeb.EntriesController, :new
+    get  "/",                    SnaWeb.EntriesController, :index
+    get  "/:id",                 SnaWeb.EntriesController, :show
+    get  "/:id/edit",            SnaWeb.EntriesController, :edit
+    post "/:id/delete",          SnaWeb.EntriesController, :destroy
+    get  "/:id/campaign",        SnaWeb.EntriesCampaignController, :show
+    post "/:id/campaign",        SnaWeb.EntriesCampaignController, :update
+    post "/:id/campaign/delete", SnaWeb.EntriesCampaignController, :destroy
+    get  "/:id/campaign/new",    SnaWeb.EntriesCampaignController, :new
+    get  "/:id/campaign/edit",   SnaWeb.EntriesCampaignController, :edit
   end
 
   scope "/api/v0", as: "api_v0" do

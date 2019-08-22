@@ -50,6 +50,14 @@ mix deps.get
 mix compile
 ```
 
+To build assets:
+
+```
+cd assets
+npm install
+node node_modules/brunch/bin/brunch build
+```
+
 ## How to test it
 
 This project only support unit testing.

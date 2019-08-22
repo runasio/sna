@@ -1,6 +1,8 @@
 defmodule SnaWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :sna
 
+  socket "/live", Phoenix.LiveView.Socket
+
   socket "/socket", SnaWeb.UserSocket,
     websocket: true,
     longpoll: false

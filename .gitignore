@@ -29,3 +29,5 @@ sna-*.tar
 
 # emacs files
 *~
+
+node_modules/
