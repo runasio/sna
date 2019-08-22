@@ -86,7 +86,22 @@ defmodule Sna.Repo.Entry do
     Sna.Repo.all(
       from e in Sna.Repo.Entry,
       join: r in assoc(e, :entry_user_relations),
+      left_join: c in assoc(e, :campaign),
+      preload: [campaign: c],
       where: r.user_id == ^uid
+    )
+  end
+
+  @spec all_from_user_id(integer, any) :: [%Sna.Repo.Entry{}]
+  def all_from_user_id(uid, with_campaigns: with_campaigns) do
+    import Ecto.Query
+    Sna.Repo.all(
+      from e in Sna.Repo.Entry,
+      join: r in assoc(e, :entry_user_relations),
+      left_join: c in assoc(e, :campaign),
+      preload: [campaign: c],
+      where: r.user_id == ^uid,
+      where: is_nil(c.id) != ^with_campaigns
     )
   end
 
@@ -101,6 +116,8 @@ defmodule Sna.Repo.Entry do
     Sna.Repo.one(
       from e in Sna.Repo.Entry,
       join: r in assoc(e, :entry_user_relations),
+      left_join: c in assoc(e, :campaign),
+      preload: [campaign: c],
       where: r.user_id == ^uid,
       where: e.id == ^id
     )

@@ -39,7 +39,21 @@ defmodule Sna.Repo.Campaign do
     import Ecto.Query
     Sna.Repo.one(
       from c in __MODULE__,
+      join: e in assoc(c, :entry),
+      preload: [entry: e],
       where: c.entry_id == ^entry_id)
+  end
+
+  @spec all_from_user_id(integer) :: [%Sna.Repo.Entry{}]
+  def all_from_user_id(uid) do
+    import Ecto.Query
+    Sna.Repo.all(
+      from c in __MODULE__,
+      join: e in assoc(c, :entry),
+      join: r in assoc(e, :entry_user_relations),
+      preload: [entry: e],
+      where: r.user_id == ^uid
+    )
   end
 
   @spec exists_by_entry_id?(integer) :: boolean

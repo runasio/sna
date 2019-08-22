@@ -1,3 +1,45 @@
 <h1>Welcome to SNA</h1>
 
+<%= if not @authenticated do %>
+
 <p>Authenticate to get started</p>
+
+<% else %>
+
+<p>Link social networks to your account:</p>
+
+<ul>
+  <li><a href="<%= Routes.provider_o_auth_path(@conn, :request, "github") %>">Connect GitHub</a></li>
+</ul>
+
+<%= if length(@entries) > 0 do %>
+<p>Entries without campaigns:</p>
+<ul>
+<%= for entry <- @entries do %>
+  <li>
+    <a href="<%= Routes.entries_path(@conn, :show, entry.id) %>"><%= entry.name %></a>
+    (<a href="<%= Routes.entries_campaign_path(@conn, :new, entry.id) %>">create campaign</a>)
+  </li>
+<% end %>
+</ul>
+<% end %>
+
+<%= if length(@campaigns) > 0 do %>
+<p>Campaigns:</p>
+<ul>
+<%= for campaign <- @campaigns do %>
+  <li>
+    <a href="<%= Routes.entries_campaign_path(@conn, :show, campaign.entry_id) %>"><%= campaign.name %>
+    <%= if campaign.name != campaign.entry.name do %>
+      - <%= campaign.entry.name %>
+    <% end %>
+    </a>
+  </li>
+<% end %>
+</ul>
+<% end %>
+
+<p><a href="<%= Routes.entries_path(@conn, :new) %>">Create a new entry</a></p>
+
+<% end %>
+

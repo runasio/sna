@@ -1,0 +1,81 @@
+/* This file is for your main application css. */
+
+body{
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  display: flex;
+  background-color: beige;
+  margin-bottom: 1em;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+header > * {
+  margin: 10px;
+}
+
+header [role=logo] {
+  font-weight: bold;
+  font-size: 2em;
+}
+
+header nav[role=navigation] ul,
+header nav[role=login] ul {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+header nav[role=navigation] li,
+header nav[role=login] li {
+  display: inline;
+}
+
+header nav[role=navigation] ul li:not(:first-child):before,
+header nav[role=login] ul li:not(:first-child):before {
+  content: " | "
+}
+
+header nav[role=navigation] {
+  flex-grow: 1;
+}
+
+header nav[role=login] {
+  align: right;
+}
+
+form.link {
+  display: inline;
+}
+
+a {
+  color: #069;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button.link, input[type=submit].link, form.link button, form.link input {
+  display: inline;
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: inherit;
+  /*input has OS specific font-family*/
+  color: #069;
+  cursor: pointer;
+}
+
+a:hover, form.link button:hover, form.link input:hover {
+  text-decoration: underline;
+}
+
+.entries.list article.entry.item {
+  border: 1px solid brown;
+  margin: 1em;
+  padding: 1em;
+  border-radius: 0.5em;
+}
