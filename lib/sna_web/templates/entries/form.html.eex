@@ -1,4 +1,14 @@
 <h1>Entry</h1>
+<%= if @entry.id != nil do %>
+<div>
+  <a href="<%= Routes.entries_path(@conn, :show, @entry.id) %>">view</a>
+  <%= form_for @conn, Routes.entries_path(@conn, :destroy, @entry.id), [method: :post, class: :link], fn _f -> %>
+    <%= submit "delete", class: :link %>
+  <% end %>
+</div>
+<% end %>
+
+<hr/>
 
 <p>This page will give the possibility to create a new
 entry. An entry is a data-structure containing raw information

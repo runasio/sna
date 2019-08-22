@@ -17,9 +17,17 @@
   </head>
   <body>
     <header>
+      <nav role="logo">
+        <a href="<%= Routes.page_path(@conn, :index) %>">SNA</a>
+      </nav>
       <nav role="navigation">
         <ul>
-          <li><a href="<%= Routes.page_path(@conn, :index) %>">SNA</a></li>
+          <li><a href="<%= Routes.entries_path(@conn, :index) %>">All Entries</a></li>
+          <li><a href="<%= Routes.entries_path(@conn, :new) %>">New Entry</a></li>
+        </ul>
+      </nav>
+      <nav role="login">
+        <ul>
           <%=
           case current_user(@conn) do
             %{email: email} ->
@@ -28,9 +36,6 @@
               raw "<li><a href=\"/auth\">Authenticate</a></li>"
           end
           %>
-          <li><a href="<%= Routes.provider_o_auth_path(@conn, :request, "github") %>">Connect GitHub</a></li>
-          <li><a href="<%= Routes.entries_path(@conn, :index) %>">All Entries</a></li>
-          <li><a href="<%= Routes.entries_path(@conn, :new) %>">New Entry</a></li>
         </ul>
       </nav>
     </header>
