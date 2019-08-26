@@ -24,6 +24,14 @@ config :sna, SnaWeb.Endpoint,
   render_errors: [view: SnaWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Sna.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :sna, :phoenix_swagger,
+  swagger_files: %{
+    "priv/static/swagger.json" => [
+      router: SnaWeb.Router,     # phoenix routes will be converted to swagger paths
+      endpoint: SnaWeb.Endpoint  # (optional) endpoint config used to set host, port and https schemes.
+    ]
+  }
+
 config :sna, :oauth_providers,
   github: Ueberauth.Strategy.Github
 

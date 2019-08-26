@@ -8,7 +8,7 @@ defmodule Sna.MixProject do
       version: "0.1.0",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix, :gettext, :phoenix_swagger] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -37,6 +37,11 @@ defmodule Sna.MixProject do
       {:ecto_sql, "~> 3.1"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.11"},
+
+      # Latest master fixes a compatibility issue with Phoenix, not released yet
+      # https://github.com/xerions/phoenix_swagger/issues/232
+      {:phoenix_swagger, git: "https://github.com/xerions/phoenix_swagger.git", tag: "master"},
+
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:joken, "~> 2.0"},
@@ -44,12 +49,15 @@ defmodule Sna.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:gen_state_machine, "~> 2.0"},
       {:httpoison, "~> 1.4"},
-      {:ex_json_schema, "~> 0.5.4"},
+      {:ex_json_schema, "~> 0.6"},
       {:swoosh, "~> 0.23"},
       {:dialyxir, "~> 1.0.0-rc.6", only: [:dev, :test], runtime: false},
       {:ueberauth, "~> 0.6"},
       {:ueberauth_github, "~> 0.7"},
-      {:poison, "~> 3.1"}, # https://github.com/ueberauth/ueberauth_github/issues/50
+
+      # Should not be needed as we have jason instead, but:
+      # https://github.com/ueberauth/ueberauth_github/issues/50
+      {:poison, "~> 3.1"},
     ]
   end
 

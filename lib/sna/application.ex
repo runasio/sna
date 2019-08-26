@@ -6,6 +6,8 @@ defmodule Sna.Application do
   use Application
 
   def start(_type, _args) do
+    PhoenixSwagger.Validator.parse_swagger_schema("priv/static/swagger.json")
+
     # List all child processes to be supervised
     children = [
       # Start the Ecto repository

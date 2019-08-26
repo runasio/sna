@@ -1,0 +1,12 @@
+defmodule Sna.ErrorUtils do
+
+  @spec changeset_errors(Ecto.Changeset.t) :: %{required(atom) => [String.t]}
+  def changeset_errors(%Ecto.Changeset{} = changeset) do
+    Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+      Enum.reduce(opts, msg, fn {key, value}, acc ->
+        String.replace(acc, "%{#{key}}", to_string(value))
+      end)
+    end)
+  end
+
+end

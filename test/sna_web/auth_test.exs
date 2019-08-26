@@ -7,6 +7,10 @@ defmodule SnaWeb.AuthTest do
     "mailbox@example.org"
   end
 
+  defp example_login do
+    "login"
+  end
+
   defp example_request do
     build_conn("GET", "/")
       |> Plug.Test.init_test_session(foo: "bar")
@@ -24,12 +28,19 @@ defmodule SnaWeb.AuthTest do
   end
 
   test "checks valid session token returns current_user" do
+    user = %Sna.Repo.User{
+      login: example_login(),
+      email: example_email()
+    } |> Sna.Repo.User.changeset
+      |> Sna.Repo.insert!
+
     conn = example_request()
       |> put_session("auth_token", example_token())
+      |> put_session("auth_user_id", user.id)
 
     conn = SnaWeb.Auth.check_auth(conn, nil)
 
-    assert SnaWeb.Auth.current_user(conn) == %{email: example_email()}
+    assert SnaWeb.Auth.current_user(conn) == %{email: example_email(), id: user.id}
   end
 
   test "checks invalid session token returns nil current_user" do

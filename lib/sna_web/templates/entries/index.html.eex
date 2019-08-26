@@ -1,0 +1,7 @@
+<ul>
+<%= for entry <- @entries do %>
+  <li>
+    <%= render(SnaWeb.EntriesView, "show.html", conn: @conn, entry: entry) %>
+  </li>
+<% end %>
+</ul>

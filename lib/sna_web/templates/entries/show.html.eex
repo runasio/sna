@@ -1,0 +1,9 @@
+<h1><%= @entry.name %></h1>
+<p>
+  <a href="<%= Routes.entries_path(@conn, :show, @entry.id) %>">view</a>
+  <a href="<%= Routes.entries_path(@conn, :edit, @entry.id) %>">edit</a>
+  <%= form_for @conn, Routes.entries_path(@conn, :destroy, @entry.id), [method: :post], fn _f -> %>
+    <%= submit "delete" %>
+  <% end %>
+</p>
+<p><%= @entry.content %></p>

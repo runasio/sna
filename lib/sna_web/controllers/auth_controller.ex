@@ -28,9 +28,10 @@ defmodule SnaWeb.AuthController do
           admin: false,
         })
         case inserted do
-          {:ok, _} ->
+          {:ok, record} ->
             conn
               |> put_session("auth_token", token)
+              |> put_session("auth_user_id", record.id)
               |> redirect(to: "/")
               |> halt()
           {:error, %{errors: [ email: { _, [ constraint: :unique, constraint_name: _ ] } ]}} ->
@@ -48,14 +49,16 @@ defmodule SnaWeb.AuthController do
               |> render("first-login.html", token: token, email: email, errors: errors)
         end
       [{:ok, %{"email" => email}}, _] ->
-        if Sna.Repo.User.email_exists(email) do
-          conn
-            |> put_session("auth_token", token)
-            |> redirect(to: "/")
-            |> halt()
-        else
-          conn
-            |> render("first-login.html", token: token, email: email)
+        case Sna.Repo.User.get_by_email(email) do
+          nil ->
+            conn
+              |> render("first-login.html", token: token, email: email)
+          %{ id: user_id } ->
+            conn
+              |> put_session("auth_token", token)
+              |> put_session("auth_user_id", user_id)
+              |> redirect(to: "/")
+              |> halt()
         end
       [{:error, reason}, _] ->
         Logger.error("Could not verify token: #{inspect(reason)}")
@@ -75,6 +78,7 @@ defmodule SnaWeb.AuthController do
   def logout(conn, _params) do
     conn
       |> delete_session("auth_token")
+      |> delete_session("auth_user_id")
       |> put_flash(:info, "You are logged out")
       |> redirect(to: "/")
       |> halt()

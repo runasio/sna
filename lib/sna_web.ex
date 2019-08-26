@@ -29,6 +29,19 @@ defmodule SnaWeb do
     end
   end
 
+  def api_controller do
+    quote do
+      use PhoenixSwagger
+      use Phoenix.Controller, namespace: SnaWeb
+
+      import Plug.Conn
+      import SnaWeb.Auth, only: [current_user: 1]
+      import SnaWeb.Gettext
+      require Logger
+      alias SnaWeb.Router.Helpers, as: Routes
+    end
+  end
+
   def view do
     quote do
       use Phoenix.View,

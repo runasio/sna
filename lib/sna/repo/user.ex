@@ -21,8 +21,11 @@ defmodule Sna.Repo.User do
     field :login, :string
     field :email, :string
     field :admin, :boolean
+
+    many_to_many :entries, Sna.Repo.Entry, join_through: "entry_user_relations"
   end
 
+  @spec changeset(map, map) :: %Ecto.Changeset{}
   def changeset(model, params \\ %{}) do
     model
       |> cast(params, [:email, :login])
@@ -42,25 +45,15 @@ defmodule Sna.Repo.User do
   @spec email_exists(String.t) :: boolean
   def email_exists(email) do
     import Ecto.Query
-    case Sna.Repo.all(
-      from u in __MODULE__,
-      where: u.email == ^email,
-      select: count(u.email))
-    do
-      [0] ->
-        false
-      [1] ->
-        true
-    end
+    Sna.Repo.exists?(from u in __MODULE__, where: u.email == ^email)
   end
 
-  @spec get_by_email(String.t) :: __MODULE__.t
+  @spec get_by_email(String.t) :: nil | __MODULE__.t
   def get_by_email(email) do
     import Ecto.Query
-    [ res ] = Sna.Repo.all(
+    Sna.Repo.one(
       from u in __MODULE__,
       where: u.email == ^email)
-    res
   end
 
   @spec insert(__MODULE__.t) :: {:ok, __MODULE__.t} | {:error, Ecto.Changeset.t()}
