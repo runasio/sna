@@ -73,7 +73,8 @@ a:hover, form.link button:hover, form.link input:hover {
   text-decoration: underline;
 }
 
-.entries.list article.entry.item {
+.entries.list article.entry.item,
+.campaigns.list article.campaign.item {
   border: 1px solid brown;
   margin: 1em;
   padding: 1em;

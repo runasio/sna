@@ -1,0 +1,12 @@
+<%= if length(@campaigns) > 0 do %>
+
+<div class="campaigns list">
+<%= for campaign <- @campaigns do %>
+  <article class="campaign item">
+    <%= render(@view_module, "_preview.html", conn: @conn, campaign: campaign, entry: campaign.entry) %>
+  </article>
+<% end %>
+</div>
+
+<% end %>
+

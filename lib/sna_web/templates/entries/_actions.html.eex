@@ -1,0 +1,14 @@
+<div>
+  <a href="<%= Routes.entries_path(@conn, :edit, @entry.id) %>">edit</a>
+  <%= form_for @conn, Routes.entries_path(@conn, :destroy, @entry.id), [method: :post, class: :link], fn _f -> %>
+    <%= submit "delete", class: :link %>
+  <% end %>
+  <%= if not (assigns[:hide_campaign] || false) do %>
+  <%= if @entry.campaign do %>
+    <br />
+    <a href="<%= Routes.entries_campaign_path(@conn, :show, @entry.id) %>">campaign: <%= @entry.campaign.name %></a>
+  <% else %>
+    <a href="<%= Routes.entries_campaign_path(@conn, :new, @entry.id) %>">new campaign</a>
+  <% end %>
+  <% end %>
+</div>

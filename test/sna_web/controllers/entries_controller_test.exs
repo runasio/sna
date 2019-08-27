@@ -58,15 +58,15 @@ defmodule SnaWeb.EntriesControllerTest do
     conn = conn
       |> get("/entries/#{id1}/edit")
 
-    assert html_response(conn, 200) =~ "<div id=\"editor\""
-    assert html_response(conn, 200) =~ "<input name=\"name\" type=\"text\" value=\"Entry name 1\""
+    assert html_response(conn, 200) =~ "new Quill"
+    assert html_response(conn, 200) =~ ~r/<input [^>]*name="entry\[name\]"[^>]* value="Entry name 1"/
     assert html_response(conn, 200) =~ "Entry content 1"
 
     conn = conn
       |> get("/entries/#{id2}/edit")
 
-    assert html_response(conn, 200) =~ "<div id=\"editor\""
-    assert html_response(conn, 200) =~ "<input name=\"name\" type=\"text\" value=\"Entry name 2\""
+    assert html_response(conn, 200) =~ "new Quill"
+    assert html_response(conn, 200) =~ ~r/<input [^>]*name="entry\[name\]"[^>]* value="Entry name 2"/
     assert html_response(conn, 200) =~ "Entry content 2"
   end
 
@@ -76,8 +76,8 @@ defmodule SnaWeb.EntriesControllerTest do
     conn = conn
       |> get("/entries/new")
 
-    assert html_response(conn, 200) =~ "<div id=\"editor\""
-    assert html_response(conn, 200) =~ "<input name=\"name\" type=\"text\" value=\"Your entry name\""
+    assert html_response(conn, 200) =~ "new Quill"
+    #assert html_response(conn, 200) =~ ~r/<input [^>]*name="entry\[name\]"[^>]* value="Your entry name"/
   end
 
   test "POST /entries/:id/delete", %{conn: conn} do

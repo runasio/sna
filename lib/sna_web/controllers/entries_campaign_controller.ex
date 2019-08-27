@@ -10,6 +10,7 @@ defmodule SnaWeb.EntriesCampaignController do
     entry_id = entry_id |> String.to_integer
     uid = current_user(conn).id
     conn = conn
+      |> put_view(SnaWeb.CampaignsView)
       |> put_arg(:uid, uid)
 
     case Sna.Repo.Entry.get_with_user_id(entry_id, uid) do

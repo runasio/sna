@@ -43,16 +43,23 @@ defmodule SnaWeb.Router do
   scope "/entries" do
     pipe_through [:browser, :authenticated]
 
-    get  "/new",                 SnaWeb.EntriesController, :new
+    live "/new",                 SnaWeb.EntriesLive.Form, session: [:path_params, :auth]
+    get  "/new/.",               SnaWeb.EntriesController, :new # Helpers only
     get  "/",                    SnaWeb.EntriesController, :index
     get  "/:id",                 SnaWeb.EntriesController, :show
-    get  "/:id/edit",            SnaWeb.EntriesController, :edit
+    live "/:id/edit",            SnaWeb.EntriesLive.Form, session: [:path_params, :auth]
+    get  "/:id/edit/.",          SnaWeb.EntriesController, :edit # Helpers only
     post "/:id/delete",          SnaWeb.EntriesController, :destroy
     get  "/:id/campaign",        SnaWeb.EntriesCampaignController, :show
     post "/:id/campaign",        SnaWeb.EntriesCampaignController, :update
     post "/:id/campaign/delete", SnaWeb.EntriesCampaignController, :destroy
     get  "/:id/campaign/new",    SnaWeb.EntriesCampaignController, :new
     get  "/:id/campaign/edit",   SnaWeb.EntriesCampaignController, :edit
+  end
+
+  scope "/campaigns" do
+    pipe_through [:browser, :authenticated]
+    get  "/",                    SnaWeb.CampaignsController, :index
   end
 
   scope "/api/v0", as: "api_v0" do
