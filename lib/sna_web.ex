@@ -22,6 +22,7 @@ defmodule SnaWeb do
       use Phoenix.LiveView
 
       alias SnaWeb.Router.Helpers, as: Routes
+      import Phoenix.View, only: [render: 3]
     end
   end
 
@@ -65,13 +66,14 @@ defmodule SnaWeb do
 
   def view do
     quote do
+      require Logger
       use Phoenix.View,
         root: "lib/sna_web/templates",
         pattern: "**/*",
         namespace: SnaWeb
 
       # Import convenience functions from controllers
-      import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
+      import Phoenix.Controller, only: [get_flash: 1, get_flash: 2]
 
       import SnaWeb.Auth, only: [current_user: 1]
 
@@ -83,6 +85,37 @@ defmodule SnaWeb do
       import SnaWeb.ErrorHelpers
       import SnaWeb.Gettext
       alias SnaWeb.Router.Helpers, as: Routes
+
+      def view_module(conn) do
+        case Phoenix.Controller.view_module(conn) do
+          Phoenix.LiveView.Controller ->
+            try do
+              apply(conn.assigns.live_view_module, :view_module, [])
+            rescue
+              UndefinedFunctionError -> nil
+            end
+          mod -> mod
+        end
+      end
+
+      def view_template(conn) do
+        case Phoenix.Controller.view_module(conn) do
+          Phoenix.LiveView.Controller ->
+            try do
+              apply(conn.assigns.live_view_module, :view_template, [])
+            rescue
+              UndefinedFunctionError -> nil
+            end
+          _ -> Phoenix.Controller.view_template(conn)
+        end
+      end
+
+      def action_name(conn) do
+        case Phoenix.Controller.view_module(conn) do
+          Phoenix.LiveView.Controller -> nil
+          _ -> Phoenix.Controller.action_name(conn)
+        end
+      end
     end
   end
 

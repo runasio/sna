@@ -22,6 +22,7 @@ defmodule Sna.Repo.User do
     field :email, :string
     field :admin, :boolean
 
+    has_many     :tokens,  Sna.Repo.Token
     many_to_many :entries, Sna.Repo.Entry, join_through: "entry_user_relations"
   end
 

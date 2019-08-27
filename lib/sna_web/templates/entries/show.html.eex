@@ -1,17 +1,5 @@
 <h1><%= @entry.name %></h1>
-<div>
-  <a href="<%= Routes.entries_path(@conn, :show, @entry.id) %>">view</a>
-  <a href="<%= Routes.entries_path(@conn, :edit, @entry.id) %>">edit</a>
-  <%= form_for @conn, Routes.entries_path(@conn, :destroy, @entry.id), [method: :post, class: :link], fn _f -> %>
-    <%= submit "delete", class: :link %>
-  <% end %>
-  <%= if @entry.campaign do %>
-    <br />
-    <a href="<%= Routes.entries_campaign_path(@conn, :show, @entry.id) %>">campaign: <%= @entry.campaign.name %></a>
-  <% else %>
-    <a href="<%= Routes.entries_campaign_path(@conn, :new, @entry.id) %>">new campaign</a>
-  <% end %>
-</div>
+<%= render(@view_module, "_actions.html", assigns) %>
 
 <hr/>
 

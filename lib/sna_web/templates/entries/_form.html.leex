@@ -1,0 +1,48 @@
+<script src="/js/quill.js"></script>
+<%= form_for @entry, "#", [phx_change: :validate, phx_submit: :save], fn f -> %>
+  <%= if @entry.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <h1><%= text_input f, :name %></h1>
+  <%= error_tag f, :name %>
+
+  <%= hidden_input f, :content %>
+  <div phx-update="ignore">
+    <div>
+      <%= @entry.data.content %>
+    </div>
+    <script>
+      /* create a new editor*/
+      var quill = new Quill(document.currentScript.previousElementSibling, {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            { 'header': [1, 2, 3, 4, 5, 6, false] },
+            'bold', 'italic', 'underline', 'strike', 'link', 'image'
+          ]
+        }
+      });
+      quill.on('text-change', function(delta, oldDelta, source) {
+        if (source == 'user') {
+          let field = document.getElementById("entry_content")
+          field.value = quill.getContents().ops[0].insert
+          field.dispatchEvent(new Event("change", {
+            bubbles: true
+          }))
+        }
+      });
+    </script>
+  </div>
+  <script>
+    quill.setContents([
+      {insert: "<%= @entry.data.content %>"}
+    ])
+  </script>
+
+  <div>
+    <%= submit "Save", phx_disable_with: "Saving..." %>
+  </div>
+<% end %>

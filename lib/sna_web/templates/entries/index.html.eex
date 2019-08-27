@@ -5,7 +5,7 @@
 <div class="entries list">
 <%= for entry <- @entries do %>
   <article class="entry item">
-    <%= render(SnaWeb.EntriesView, "show.html", conn: @conn, entry: entry) %>
+    <%= render(SnaWeb.EntriesView, "_preview.html", conn: @conn, entry: entry) %>
   </article>
 <% end %>
 </div>

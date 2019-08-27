@@ -9,7 +9,13 @@
 <p>Link social networks to your account:</p>
 
 <ul>
-  <li><a href="<%= Routes.provider_o_auth_path(@conn, :request, "github") %>">Connect GitHub</a></li>
+  <li>GitHub:
+    <%= if Map.has_key?(@tokens, "github") do %>
+      <a href="<%= Routes.provider_o_auth_path(@conn, :request, "github") %>">Renew GitHub Token</a>
+    <% else %>
+      <a href="<%= Routes.provider_o_auth_path(@conn, :request, "github") %>">Connect with GitHub</a>
+    <% end %>
+  </li>
 </ul>
 
 <%= if length(@entries) > 0 do %>
