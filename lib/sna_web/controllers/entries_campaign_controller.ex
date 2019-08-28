@@ -69,12 +69,11 @@ defmodule SnaWeb.EntriesCampaignController do
 
   @spec form(Plug.Conn.t, Plug.Conn.params, args, String.t) :: Plug.Conn.t
   def form(conn, _params, %{entry: entry, campaign: campaign}, template) do
-    campaign = Sna.Repo.Campaign.changeset(campaign)
     # https://github.com/phoenixframework/phoenix_live_view/issues/111
     crsf_token = get_csrf_token()
     Logger.info("crsf token = #{inspect(crsf_token)}")
     conn
-      |> render(template, session: %{
+      |> render(template, session: %SnaWeb.EntriesCampaignLive.Form.Session{
         entry:      entry,
         campaign:   campaign,
         uid:        current_user(conn).id,
@@ -82,13 +81,21 @@ defmodule SnaWeb.EntriesCampaignController do
   end
 
   @spec show(Plug.Conn.t, Plug.Conn.params, args) :: Plug.Conn.t
-  def show(conn, _params, %{entry: entry, campaign: campaign}) do
+  def show(conn, _params, %{entry: entry, campaign: campaign, uid: uid}) do
     if campaign == nil do
       conn
         |> redirect(to: Routes.entries_campaign_path(conn, :new, entry.id))
     else
+      user = Sna.Repo.get(Sna.Repo.User, uid)
+        |> Sna.Repo.preload(:providers)
+
+      campaign = campaign
+        |> Sna.Repo.preload(scheduled_entries: [:provider])
+
       conn
-        |> render("show.html", entry: entry, campaign: campaign)
+        |> render("show.html", entry: entry,
+          campaign:  campaign,
+          providers: user.providers)
     end
   end
 

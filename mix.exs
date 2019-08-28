@@ -56,6 +56,7 @@ defmodule Sna.MixProject do
       {:dialyxir, "~> 1.0.0-rc.6", only: [:dev, :test], runtime: false},
       {:ueberauth, "~> 0.6"},
       {:ueberauth_github, "~> 0.7"},
+      {:typed_struct, "~> 0.1.4"},
 
       # Should not be needed as we have jason instead, but:
       # https://github.com/ueberauth/ueberauth_github/issues/50

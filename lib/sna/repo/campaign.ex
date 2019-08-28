@@ -17,6 +17,8 @@ defmodule Sna.Repo.Campaign do
     entry: Sna.Repo.Entry.t,
   }
 
+  @type changeset :: Ectp.Changeset.t(t)
+
   schema "campaigns" do
     field :name, :string
 
@@ -25,14 +27,19 @@ defmodule Sna.Repo.Campaign do
     has_many   :scheduled_entries, Sna.Repo.ScheduledEntry
   end
 
-  @spec changeset(map, map) :: %Ecto.Changeset{}
-  def changeset(model, params \\ %{}) do
+  @spec changeset(t | changeset | Ecto.Schema.t, map) :: changeset
+  def changeset(model, params) do
     model
       |> cast(params, [:name])
+      |> cast_assoc(:scheduled_entries, with: &Sna.Repo.ScheduledEntry.changeset/1)
       |> validate_required([:name])
       |> validate_length(:name, min: 1)
       |> unique_constraint(:entry_id)
   end
+
+  @spec changeset(t | changeset | Ecto.Schema.t | map) :: changeset
+  def changeset(%__MODULE__{} = model), do: changeset(model, %{})
+  def changeset(%{} = params), do: changeset(%__MODULE__{}, params)
 
   @spec get_by_entry_id(integer) :: __MODULE__.t | nil
   def get_by_entry_id(entry_id) do
@@ -64,7 +71,7 @@ defmodule Sna.Repo.Campaign do
       where: c.entry_id == ^entry_id)
   end
 
-  #spec insert_or_update(Ecto::Changeset.t) :: (({:ok, __MODULE__.t}) | ({:error, Ecto.Changeset.t}))
+  #spec insert_or_update(changeset) :: (({:ok, __MODULE__.t}) | ({:error, changeset}))
   def insert_or_update(changeset) do
     Sna.Repo.insert_or_update(changeset)
   end

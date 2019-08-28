@@ -59,7 +59,12 @@ defmodule SnaWeb.Router do
 
   scope "/campaigns" do
     pipe_through [:browser, :authenticated]
-    get  "/",                    SnaWeb.CampaignsController, :index
+    get  "/",                      SnaWeb.CampaignsController, :index
+  end
+
+  scope "/scheduled_entries" do
+    pipe_through [:browser, :authenticated]
+    post "/", SnaWeb.ScheduledEntriesController, :create
   end
 
   scope "/api/v0", as: "api_v0" do
