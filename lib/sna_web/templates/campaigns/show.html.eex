@@ -1,8 +1,30 @@
 <h1>Campaign: <%= @campaign.name %></h1>
 <%= render(@view_module, "_actions.html", assigns) %>
 
+<%= if length(@providers) == 0 do %>
+<p><em>To publish this campaign on a social network, you must first associate with one.</em></p>
+<% else %>
+Add social network:
+<ul class="inline actions">
+  <%= for provider <- @providers do %>
+  <li>
+    <%= form_for @conn, Routes.scheduled_entries_path(@conn, :create), [method: :post, class: :link], fn _f -> %>
+      <input type="hidden" name="scheduled_entry[provider_id]" value="<%= provider.id %>" />
+      <input type="hidden" name="scheduled_entry[campaign_id]" value="<%= @campaign.id %>" />
+      <%= submit provider.name, class: :link %>
+    <% end %>
+  </li>
+  <% end %>
+</ul>
+<% end %>
+
 <div class="entries list">
   <article class="entry item">
     <%= render(SnaWeb.EntriesView, "show.html", conn: @conn, entry: @entry, hide_campaign: true) %>
   </article>
+  <%= for scheduled_entry <- @campaign.scheduled_entries do %>
+  <article class="scheduled_entry item">
+    Scheduled entry for <%= scheduled_entry.provider.name %>
+  </article>
+  <% end %>
 </div>

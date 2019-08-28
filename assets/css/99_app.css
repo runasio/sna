@@ -74,9 +74,28 @@ a:hover, form.link button:hover, form.link input:hover {
 }
 
 .entries.list article.entry.item,
+.entries.list article.scheduled_entry.item,
 .campaigns.list article.campaign.item {
   border: 1px solid brown;
   margin: 1em;
   padding: 1em;
   border-radius: 0.5em;
+}
+
+ul.actions {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+ul.actions.inline {
+  display: inline;
+}
+
+ul.actions > li {
+  display: inline;
+}
+
+ul.actions > li:not(:first-child):before {
+  content: " | "
 }
