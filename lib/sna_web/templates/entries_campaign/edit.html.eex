@@ -1,0 +1,3 @@
+<h1>Edit campaign</h1>
+<%= render(@view_module, "_actions.html", conn: @conn, entry: @session.entry) %>
+<%= live_render(@conn, SnaWeb.EntriesCampaignLive.Form, session: @session) %>

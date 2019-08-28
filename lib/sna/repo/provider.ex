@@ -22,7 +22,8 @@ defmodule Sna.Repo.Provider do
     field :name,       :string
     field :strategy,   :string
     field :production, :boolean
-    has_one :provider_info, Sna.Repo.ProviderInfo
+    has_one  :provider_info,     Sna.Repo.ProviderInfo
+    has_many :scheduled_entries, Sna.Repo.ScheduledEntry
   end
 
   @spec changeset(map, map) :: %Ecto.Changeset{}

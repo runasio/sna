@@ -43,6 +43,7 @@ defmodule Sna.MixProject do
       {:phoenix_swagger, git: "https://github.com/xerions/phoenix_swagger.git", tag: "master"},
 
       {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
       {:gettext, "~> 0.11"},
       {:joken, "~> 2.0"},
       {:jason, "~> 1.0"},

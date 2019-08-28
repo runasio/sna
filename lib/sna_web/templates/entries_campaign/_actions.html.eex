@@ -1,0 +1,7 @@
+<p>
+  <a href="<%= Routes.entries_campaign_path(@conn, :show, @entry.id) %>">view</a>
+  <a href="<%= Routes.entries_campaign_path(@conn, :edit, @entry.id) %>">edit</a>
+  <%= form_for @conn, Routes.entries_campaign_path(@conn, :destroy, @entry.id), [method: :post, class: :link], fn _f -> %>
+    <%= submit "delete", class: :link %>
+  <% end %>
+</p>

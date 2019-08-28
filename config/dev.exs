@@ -53,7 +53,7 @@ config :sna, SnaWeb.Endpoint,
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/sna_web/{live,views}/.*(ex)$",
-      ~r"lib/sna_web/templates/.*(eex)$"
+      ~r"lib/sna_web/templates/.*(l?eex)$"
     ]
   ]
 

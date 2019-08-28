@@ -22,8 +22,9 @@ defmodule Sna.Repo.Entry do
     field :content,   :string
     field :automatic, :boolean
 
-    many_to_many :users, Sna.Repo.User, join_through: "entry_user_relations"
-    has_many :entry_user_relations, Sna.Repo.EntryUserRelation
+    many_to_many :users,                Sna.Repo.User, join_through: "entry_user_relations"
+    has_many     :entry_user_relations, Sna.Repo.EntryUserRelation
+    has_one      :campaign,             Sna.Repo.Campaign
   end
 
   @spec record(%{}) :: %Ecto.Changeset{}

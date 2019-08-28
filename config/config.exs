@@ -22,7 +22,10 @@ config :sna, SnaWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "DPSxmdG6g232bXq8aHZ0J1eTZmCyUPYU5VbcO1GXk3McfYj+hfOokRpXKmg0u2It",
   render_errors: [view: SnaWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Sna.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Sna.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [
+    signing_salt: "TQ/q+HQ7zQ5ZC/l5jswmIBDtkgVXGFmD"
+  ]
 
 config :sna, :phoenix_swagger,
   swagger_files: %{
