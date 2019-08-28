@@ -5,10 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <%= render_existing(@view_module, "meta/meta." <> @view_template, assigns) ||
-        render_existing(@view_module, "meta/meta.html", assigns) ||
-        render_existing(SnaWeb.LayoutView, "_meta.html", assigns) ||
-        "" %>
+    <%= meta(@conn, assigns) %>
     <title><%=
       [page_title(@conn, assigns), "Social Network Automation"]
         |> Enum.reject(&is_nil/1)
@@ -17,9 +14,18 @@
   </head>
   <body>
     <header>
+      <nav role="logo">
+        <a href="<%= Routes.page_path(@conn, :index) %>">SNA</a>
+      </nav>
       <nav role="navigation">
         <ul>
-          <li><a href="<%= Routes.page_path(@conn, :index) %>">SNA</a></li>
+          <li><a href="<%= Routes.entries_path(@conn, :index) %>">All Entries</a></li>
+          <li><a href="<%= Routes.campaigns_path(@conn, :index) %>">All Campaigns</a></li>
+          <li><a href="<%= Routes.entries_path(@conn, :new) %>">New Entry</a></li>
+        </ul>
+      </nav>
+      <nav role="login">
+        <ul>
           <%=
           case current_user(@conn) do
             %{email: email} ->
@@ -28,9 +34,6 @@
               raw "<li><a href=\"/auth\">Authenticate</a></li>"
           end
           %>
-          <li><a href="<%= Routes.provider_o_auth_path(@conn, :request, "github") %>">Connect GitHub</a></li>
-          <li><a href="<%= Routes.entries_path(@conn, :index) %>">All Entries</a></li>
-          <li><a href="<%= Routes.entries_path(@conn, :new) %>">New Entry</a></li>
         </ul>
       </nav>
     </header>

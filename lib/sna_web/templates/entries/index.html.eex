@@ -1,7 +1,14 @@
-<ul>
+<p><a href="<%= Routes.entries_path(@conn, :new) %>">Create a new entry</a></p>
+
+<%= if length(@entries) > 0 do %>
+
+<div class="entries list">
 <%= for entry <- @entries do %>
-  <li>
-    <%= render(SnaWeb.EntriesView, "show.html", conn: @conn, entry: entry) %>
-  </li>
+  <article class="entry item">
+    <%= render(SnaWeb.EntriesView, "_preview.html", conn: @conn, entry: entry) %>
+  </article>
 <% end %>
-</ul>
+</div>
+
+<% end %>
+

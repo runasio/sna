@@ -2,7 +2,8 @@ defmodule SnaWeb.Auth do
   require Logger
 
   @type user :: %{
-    email: String.t
+    email: String.t,
+    id: integer
   }
 
   @spec current_user(Plug.Conn.t) :: user | nil
@@ -22,11 +23,13 @@ defmodule SnaWeb.Auth do
       token -> case SnaWeb.Token.validate_bearer(token) do
         {:ok, %{"email" => email}} ->
           Logger.debug("SnaWeb.Auth.check_auth/2: email #{email}")
+          auth = %{
+            email: email,
+            id: get_session(conn, "auth_user_id")
+          }
           conn
-            |> assign(:auth, %{
-              email: email,
-              id: get_session(conn, "auth_user_id")
-            })
+            |> assign(:auth, auth)
+            |> put_session(:auth, auth)
         {:error, reason} ->
           Logger.debug("SnaWeb.Auth.check_auth/2: error #{inspect(reason)}")
           conn

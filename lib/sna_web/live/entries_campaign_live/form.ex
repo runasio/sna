@@ -6,7 +6,10 @@ defmodule SnaWeb.EntriesCampaignLive.Form do
     {:ok, assign(socket, session)}
   end
 
-  def render(assigns), do: Phoenix.View.render(SnaWeb.EntriesCampaignView, "_form.html", assigns)
+  def page_title(_assigns), do: "Edit Campaign"
+  def view_module,          do: SnaWeb.CampaignsView
+  def view_template,        do: "_form.html"
+  def render(assigns),      do: render(view_module(), view_template(), assigns)
 
   def handle_event("validate", %{"campaign" => params}, socket) do
     campaign = %Sna.Repo.Campaign{}

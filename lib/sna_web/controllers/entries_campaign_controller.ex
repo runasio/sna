@@ -10,6 +10,7 @@ defmodule SnaWeb.EntriesCampaignController do
     entry_id = entry_id |> String.to_integer
     uid = current_user(conn).id
     conn = conn
+      |> put_view(SnaWeb.CampaignsView)
       |> put_arg(:uid, uid)
 
     case Sna.Repo.Entry.get_with_user_id(entry_id, uid) do
@@ -58,17 +59,22 @@ defmodule SnaWeb.EntriesCampaignController do
 
   @spec new(Plug.Conn.t, Plug.Conn.params, args) :: Plug.Conn.t
   def new(conn, params, args) do
-    edit(conn, params, args)
+    form(conn, params, args, "new.html")
   end
 
   @spec edit(Plug.Conn.t, Plug.Conn.params, args) :: Plug.Conn.t
-  def edit(conn, _params, %{entry: entry, campaign: campaign}) do
+  def edit(conn, params, args) do
+    form(conn, params, args, "edit.html")
+  end
+
+  @spec form(Plug.Conn.t, Plug.Conn.params, args, String.t) :: Plug.Conn.t
+  def form(conn, _params, %{entry: entry, campaign: campaign}, template) do
     campaign = Sna.Repo.Campaign.changeset(campaign)
     # https://github.com/phoenixframework/phoenix_live_view/issues/111
     crsf_token = get_csrf_token()
     Logger.info("crsf token = #{inspect(crsf_token)}")
     conn
-      |> render("edit.html", session: %{
+      |> render(template, session: %{
         entry:      entry,
         campaign:   campaign,
         uid:        current_user(conn).id,
