@@ -6,7 +6,7 @@ defmodule Sna.MixProject do
       app: :sna,
       name: "SNA",
       version: "0.1.0",
-      elixir: "~> 1.5",
+      elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext, :phoenix_swagger] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -40,10 +40,11 @@ defmodule Sna.MixProject do
 
       # Latest master fixes a compatibility issue with Phoenix, not released yet
       # https://github.com/xerions/phoenix_swagger/issues/232
+      # Need version strictly greater than 0.8.1
       {:phoenix_swagger, git: "https://github.com/xerions/phoenix_swagger.git", tag: "master"},
 
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
+      {:phoenix_live_view, "~> 0.1"},
       {:gettext, "~> 0.11"},
       {:joken, "~> 2.0"},
       {:jason, "~> 1.0"},

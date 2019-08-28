@@ -3,9 +3,9 @@ language: elixir
 dist: bionic
 
 elixir:
-  - 1.6
   - 1.7
   - 1.8
+  - 1.9
 
 otp_release:
   - 20.1
